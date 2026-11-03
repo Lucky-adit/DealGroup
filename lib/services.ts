@@ -28,25 +28,30 @@ export async function pledge({ repo, user }: Ctx, input: { dealId: string; name:
   const name = clean(input.name, 80);
   const phone = normalizeIndianPhone(clean(input.phone, 20));
   const quantity = Math.round(toNum(input.quantity));
-  if (!name || !(quantity >= 1 && quantity <= 5)) return { error: "required" };
+  if (!name) return { error: "required" };
   if (!phone) return { error: "bad_phone" };
+  if (!(quantity >= 1 && quantity <= 5)) return { error: "bad_qty" };
   const deal = await repo.getDeal(clean(input.dealId, 64));
   if (!deal || (deal.phase !== "pledging" && deal.phase !== "bidding")) return { error: "pledge_closed" };
   await repo.upsertPledge({ dealId: deal.id, userId: user.id, quantity, name, phone });
-  return { ok: true };
+  return { ok: true, message: "pledge_saved" };
 }
 
 export async function withdraw({ repo, user }: Ctx, dealId: string): Promise<Result> {
   if (!user) return { error: "need_login" };
   const deal = await repo.getDeal(clean(dealId, 64));
-  if (!deal || deal.phase === "locked") return { error: "pledge_closed" };
+  // Once the target is reached sellers bid on a fixed group, so buyers stay in until the lock
+  // and can then decline the final price for a full refund.
+  if (!deal || deal.phase !== "pledging") return { error: "leave_locked" };
   await repo.withdrawPledge(deal.id, user.id);
   return { ok: true };
 }
 
 export async function respondToLock({ repo, user }: Ctx, pledgeId: string, accept: boolean): Promise<Result> {
   if (!user) return { error: "need_login" };
-  await repo.respondToLock(clean(pledgeId, 64), user.id, accept);
+  const mine = (await repo.listMyPledges(user.id)).find((p) => p.id === pledgeId);
+  if (!mine || mine.status !== "active" || mine.deal.phase !== "locked") return { error: "forbidden" };
+  await repo.respondToLock(mine.id, user.id, accept);
   return { ok: true, message: accept ? "accepted" : "declined" };
 }
 

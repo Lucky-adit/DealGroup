@@ -26,7 +26,7 @@ export function MobileMenu({ label, children }: { label: string; children: React
   }, []);
   return (
     <details ref={ref} className="relative md:hidden">
-      <summary className="btn btn-sm list-none" aria-label={label}>☰ {label}</summary>
+      <summary className="btn btn-sm list-none [&::-webkit-details-marker]:hidden" aria-label={label}>☰ {label}</summary>
       <div
         className="absolute right-0 mt-2 flex w-60 flex-col gap-1 rounded-xl border border-line bg-surface p-2 shadow-lg"
         onClick={(e) => {

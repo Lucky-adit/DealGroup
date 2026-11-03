@@ -51,7 +51,7 @@ export default async function MyDeals() {
                   {[1, 2, 3, 4, 5].map((n) => (
                     <label key={n} className="cursor-pointer">
                       <input type="radio" name="rating" value={n} defaultChecked={p.review?.rating === n} className="peer sr-only" />
-                      <span className="btn btn-sm peer-checked:border-accent peer-checked:text-accent">★ {n}</span>
+                      <span className="btn btn-sm peer-checked:border-accent peer-checked:text-accent peer-focus-visible:ring-2 peer-focus-visible:ring-accent">★ {n}</span>
                     </label>
                   ))}
                 </fieldset>

@@ -68,6 +68,9 @@ const en = {
   demo_login: "Demo mode: choose a role to try the app.", as_buyer: "Continue as buyer", as_seller: "Continue as seller", as_admin: "Continue as admin",
   need_login: "Please sign in first.", forbidden: "You don't have access to this page.",
   error: "Something went wrong. Please try again.", required: "Please fill in all required fields.",
+  bad_qty: "Quantity must be between 1 and 5.", pledge_saved: "Pledge saved.",
+  leave_locked: "The target is reached, so you can't leave now. When the price locks you can decline it for a full refund.",
+  signed_in_as: "You are signed in.",
   back: "← All deals", not_found: "Deal not found.",
   footer: "DealGroup prototype · Ahmedabad pilot",
 };
@@ -140,6 +143,9 @@ const hi: Record<DictKey, string> = {
   demo_login: "डेमो मोड: ऐप आज़माने के लिए भूमिका चुनें।", as_buyer: "खरीदार के रूप में", as_seller: "विक्रेता के रूप में", as_admin: "एडमिन के रूप में",
   need_login: "पहले साइन इन करें।", forbidden: "आपको इस पेज की अनुमति नहीं है।",
   error: "कुछ गलत हुआ। फिर कोशिश करें।", required: "सभी ज़रूरी जानकारी भरें।",
+  bad_qty: "मात्रा 1 से 5 के बीच होनी चाहिए।", pledge_saved: "वादा सेव हुआ।",
+  leave_locked: "लक्ष्य पूरा हो गया है, इसलिए अभी नहीं हट सकते। कीमत पक्की होने पर आप पूरे रिफ़ंड के साथ मना कर सकते हैं।",
+  signed_in_as: "आप साइन इन हैं।",
   back: "← सभी डील", not_found: "डील नहीं मिली।",
   footer: "DealGroup प्रोटोटाइप · अहमदाबाद पायलट",
 };

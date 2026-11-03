@@ -22,19 +22,6 @@ export default function DealsScreen() {
         <P muted>{t("hero_sub")}</P>
       </View>
 
-      <H2>{t("how_title")}</H2>
-      <Grid>
-        {steps.map((n) => (
-          <Card key={n} style={{ flexDirection: "row", gap: space.md }}>
-            <P style={{ color: c.accent, fontSize: 22, fontWeight: "700" }}>{n}</P>
-            <View style={{ flex: 1 }}>
-              <P style={{ fontWeight: "600" }}>{t(`how_${n}`)}</P>
-              <P muted style={{ fontSize: 13 }}>{t(`how_${n}d`)}</P>
-            </View>
-          </Card>
-        ))}
-      </Grid>
-
       <H2>{t("nav_deals")}</H2>
       <Choice
         value={cat}
@@ -47,6 +34,19 @@ export default function DealsScreen() {
       {loading && !data ? <Loading /> : error ? <Notice>{t("error")}</Notice> : deals.length ? (
         <Grid>{deals.map((d) => <DealCard key={d.id} deal={d} />)}</Grid>
       ) : <Card><P muted>{t("none_yet")}</P></Card>}
+
+      <H2>{t("how_title")}</H2>
+      <Grid>
+        {steps.map((n) => (
+          <Card key={n} style={{ flexDirection: "row", gap: space.md }}>
+            <P style={{ color: c.accent, fontSize: 22, fontWeight: "700" }}>{n}</P>
+            <View style={{ flex: 1 }}>
+              <P style={{ fontWeight: "600" }}>{t(`how_${n}`)}</P>
+              <P muted style={{ fontSize: 13 }}>{t(`how_${n}d`)}</P>
+            </View>
+          </Card>
+        ))}
+      </Grid>
     </Screen>
   );
 }

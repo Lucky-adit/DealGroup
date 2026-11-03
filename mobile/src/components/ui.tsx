@@ -23,6 +23,8 @@ export function Screen({ children, onRefresh, refreshing = false }: { children: 
       style={{ flex: 1, backgroundColor: c.bg }}
       contentContainerStyle={{ paddingBottom: space.xl + insets.bottom, paddingHorizontal: Math.max(space.lg, insets.left, insets.right), paddingTop: space.lg }}
       keyboardShouldPersistTaps="handled"
+      keyboardDismissMode="on-drag"
+      automaticallyAdjustKeyboardInsets
       refreshControl={onRefresh ? <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> : undefined}
     >
       <View style={{ width: "100%", maxWidth: 1100, alignSelf: "center", gap: space.lg }}>{children}</View>

@@ -1,11 +1,14 @@
+import { redirect } from "next/navigation";
 import { PageHeader } from "@/components/ui";
+import { getSessionUser } from "@/lib/session";
 import { demoLogin } from "@/lib/actions";
 import { isDemo } from "@/lib/data";
 import { getT } from "@/lib/lang";
 import { OtpForm } from "./OtpForm";
 
-export default function LoginPage() {
+export default async function LoginPage() {
   const { t } = getT();
+  if (await getSessionUser()) redirect("/");
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-4">
       <PageHeader title={t("login_title")} sub={isDemo() ? t("demo_login") : t("login_sub")} />

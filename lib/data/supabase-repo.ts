@@ -40,6 +40,8 @@ async function statsMap(sb: SupabaseClient) {
   return new Map(rows.map((r) => [r.deal_id as string, r]));
 }
 
+const isUuid = (s: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
+
 const phaseOrder: Record<string, number> = { pledging: 0, bidding: 1, locked: 2, expired: 3 };
 
 /** Repo backed by Supabase. Works with any client: the Next.js server client or the React Native client. */
@@ -55,6 +57,7 @@ export function createSupabaseRepo(sb: SupabaseClient): Repo {
       return (check(rows) as Row[]).map((r) => attach(toDeal(r), m)).sort((a, b) => phaseOrder[a.phase] - phaseOrder[b.phase]);
     },
     async getDeal(id) {
+      if (!isUuid(id)) return null;
       const row = check(await sb.from("deals").select("*").eq("id", id).maybeSingle()) as Row | null;
       return row ? attach(toDeal(row), await statsMap(sb)) : null;
     },
@@ -78,15 +81,15 @@ export function createSupabaseRepo(sb: SupabaseClient): Repo {
     async upsertPledge(input) {
       const r = check(await sb.from("pledges").upsert({
         deal_id: input.dealId, user_id: input.userId, quantity: input.quantity, name: input.name, phone: input.phone,
-        status: "active", deposit_status: "held",
+        status: "active",
       }, { onConflict: "deal_id,user_id" }).select().single()) as Row;
       return toPledge(r);
     },
     async withdrawPledge(dealId, userId) {
-      check(await sb.from("pledges").update({ status: "withdrawn", deposit_status: "refunded" }).eq("deal_id", dealId).eq("user_id", userId));
+      check(await sb.from("pledges").update({ status: "withdrawn" }).eq("deal_id", dealId).eq("user_id", userId));
     },
     async respondToLock(pledgeId, userId, accept) {
-      check(await sb.from("pledges").update(accept ? { status: "accepted" } : { status: "declined", deposit_status: "refunded" })
+      check(await sb.from("pledges").update({ status: accept ? "accepted" : "declined" })
         .eq("id", pledgeId).eq("user_id", userId));
     },
     async listMyPledges(userId) {
@@ -159,8 +162,8 @@ export function createSupabaseRepo(sb: SupabaseClient): Repo {
     },
 
     async setInstallStage(pledgeId, stage) {
+      // Deposit status follows automatically (database trigger on installs).
       check(await sb.from("installs").upsert({ pledge_id: pledgeId, stage, updated_at: new Date().toISOString() }));
-      if (stage === "complete") check(await sb.from("pledges").update({ deposit_status: "applied" }).eq("id", pledgeId));
     },
     async addReview(input) {
       const p = check(await sb.from("pledges").select("deal_id, deals(winning_seller_id)").eq("id", input.pledgeId).eq("user_id", input.userId).single()) as Row;

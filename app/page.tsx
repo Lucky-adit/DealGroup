@@ -22,21 +22,6 @@ export default async function Home({ searchParams }: { searchParams: { cat?: str
         <div><a href="#deals" className="btn-primary">{t("hero_cta")}</a></div>
       </section>
 
-      <section aria-labelledby="how" className="flex flex-col gap-3">
-        <h2 id="how" className="text-xl font-semibold">{t("how_title")}</h2>
-        <ol className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {steps.map((n) => (
-            <li key={n} className="card flex gap-3">
-              <span className="font-display text-2xl text-accent">{n}</span>
-              <div>
-                <p className="font-semibold">{t(`how_${n}`)}</p>
-                <p className="text-sm text-muted">{t(`how_${n}d`)}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
-
       <section id="deals" aria-labelledby="deals-h" className="flex scroll-mt-20 flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 id="deals-h" className="text-xl font-semibold">{t("nav_deals")}</h2>
@@ -58,6 +43,21 @@ export default async function Home({ searchParams }: { searchParams: { cat?: str
             {t("none_yet")} <Link href="/requests" className="text-brand underline">{t("nav_request")}</Link>
           </div>
         )}
+      </section>
+
+      <section aria-labelledby="how" className="flex flex-col gap-3">
+        <h2 id="how" className="text-xl font-semibold">{t("how_title")}</h2>
+        <ol className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {steps.map((n) => (
+            <li key={n} className="card flex gap-3">
+              <span className="font-display text-2xl text-accent">{n}</span>
+              <div>
+                <p className="font-semibold">{t(`how_${n}`)}</p>
+                <p className="text-sm text-muted">{t(`how_${n}d`)}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </section>
     </>
   );

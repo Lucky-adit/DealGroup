@@ -30,12 +30,27 @@ describe("services (demo repo)", () => {
     expect((await svc.createDeal(ctx(admin), { category: "solar", titleEn: "x", area: "y", marketPrice: 100, target: 2, deposit: 0, days: 1 }))?.ok).toBe(true);
   });
   it("sellers cannot mark an install complete", async () => {
-    const seller: SessionUser = { id: "demo-seller-2", role: "seller", phone: null, name: "S" };
+    const seller: SessionUser = { id: "demo-seller", role: "seller", phone: null, name: "S" };
     expect((await svc.sellerSetInstallStage(ctx(seller), { dealId: "solar-prahladnagar", pledgeId: "pledge-demo-locked", stage: "complete" }))?.error).toBe("forbidden");
     expect((await svc.sellerSetInstallStage(ctx(seller), { dealId: "solar-prahladnagar", pledgeId: "pledge-demo-locked", stage: "subsidy_filed" }))?.ok).toBe(true);
+  });
+  it("shows a clear quantity error", async () => {
+    expect((await svc.pledge(ctx(buyer), { dealId: "solar-satellite", name: "x", phone: "9876543210", quantity: 0 }))?.error).toBe("bad_qty");
+  });
+  it("cannot leave once the target is reached", async () => {
+    await svc.pledge(ctx(buyer), { dealId: "solar-bopal", name: "x", phone: "9876543210", quantity: 1 });
+    expect((await svc.withdraw(ctx(buyer), "solar-bopal"))?.error).toBe("leave_locked");
+  });
+  it("cannot accept a price before the deal locks", async () => {
+    await svc.pledge(ctx(buyer), { dealId: "solar-satellite", name: "x", phone: "9876543210", quantity: 1 });
+    const mine = await demoRepo.getMyPledge("solar-satellite", buyer.id);
+    expect((await svc.respondToLock(ctx(buyer), mine!.id, true))?.error).toBe("forbidden");
   });
   it("locks only with a verified bid once target is hit", async () => {
     expect((await svc.lockDeal(ctx(admin), "solar-satellite"))?.error).toBe("lock_not_ready");
     expect((await svc.lockDeal(ctx(admin), "solar-bopal"))?.ok).toBe(true);
+    const mine = await demoRepo.getMyPledge("solar-bopal", buyer.id);
+    expect((await svc.respondToLock(ctx(buyer), mine!.id, true))?.ok).toBe(true);
+    expect((await demoRepo.listMyPledges(buyer.id)).find((p) => p.id === mine!.id)?.install?.stage).toBe("survey");
   });
 });

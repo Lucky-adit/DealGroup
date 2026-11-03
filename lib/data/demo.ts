@@ -33,8 +33,8 @@ function seed(): Store {
       lockedPrice: 162000, winningSellerId: "seller-sun", lockedAt: daysFromNow(-1), isExample: true, createdAt: now },
   ];
   const sellers: Seller[] = [
-    { id: "seller-sun", userId: "demo-seller-2", company: "Example Sun Power", gstNumber: "24AAAAA0000A1Z5", empanelmentId: "DEMO-001", city: "Ahmedabad", verified: true, createdAt: now },
-    { id: "seller-demo", userId: "demo-seller", company: "Demo Solar Installers", gstNumber: "24BBBBB1111B1Z5", empanelmentId: "DEMO-002", city: "Ahmedabad", verified: false, createdAt: now },
+    { id: "seller-sun", userId: "demo-seller", company: "Example Sun Power", gstNumber: "24AAAAA0000A1Z5", empanelmentId: "DEMO-001", city: "Ahmedabad", verified: true, createdAt: now },
+    { id: "seller-demo", userId: "demo-seller-unverified", company: "Demo Solar Installers", gstNumber: "24BBBBB1111B1Z5", empanelmentId: "DEMO-002", city: "Ahmedabad", verified: false, createdAt: now },
   ];
   const bids: Bid[] = [
     { id: randomUUID(), dealId: "solar-bopal", sellerId: "seller-sun", pricePerUnit: 258000, terms: "25-year panel warranty, 5-year service", createdAt: now },

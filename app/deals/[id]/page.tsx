@@ -21,7 +21,7 @@ export default async function DealPage({ params }: { params: { id: string } }) {
   const next = nextTier(deal.tiers, deal.pledged);
   const open = deal.phase === "pledging" || deal.phase === "bidding";
   const stepIndex = { pledging: 0, bidding: deal.bidCount ? 2 : 1, locked: 3, expired: 0 }[deal.phase];
-  const messages = { need_login: t("need_login"), bad_phone: t("bad_phone"), required: t("required"), pledge_closed: t("pledge_closed"), error: t("error") };
+  const messages = { need_login: t("need_login"), bad_phone: t("bad_phone"), bad_qty: t("bad_qty"), required: t("required"), pledge_closed: t("pledge_closed"), pledge_saved: t("pledge_saved"), error: t("error") };
 
   return (
     <>
@@ -114,7 +114,7 @@ export default async function DealPage({ params }: { params: { id: string } }) {
             ) : (
               <>
                 {mine && <p className="text-sm font-semibold text-good">{t("you_pledged", { n: mine.quantity })}</p>}
-                <ActionForm action={pledge} messages={messages} successText={t("you_pledged", { n: "✓" })}>
+                <ActionForm action={pledge} messages={messages} successText={t("pledge_saved")}>
                   <input type="hidden" name="dealId" value={deal.id} />
                   <label className="label">{t("your_name")}<input className="input" name="name" required autoComplete="name" defaultValue={mine?.name ?? user.name ?? ""} /></label>
                   <label className="label">{t("phone")}<input className="input" name="phone" required inputMode="tel" autoComplete="tel" defaultValue={mine?.phone ?? user.phone ?? ""} /></label>
@@ -123,9 +123,10 @@ export default async function DealPage({ params }: { params: { id: string } }) {
                   {isDemo() && <p className="text-xs text-warn">{t("demo_payment")}</p>}
                   <SubmitButton>{mine ? t("update_btn") : t("pledge_btn")}</SubmitButton>
                 </ActionForm>
-                {mine && (
+                {mine && deal.phase === "pledging" && (
                   <form action={withdraw}><input type="hidden" name="dealId" value={deal.id} /><SubmitButton className="btn w-full">{t("leave_btn")}</SubmitButton></form>
                 )}
+                {mine && deal.phase === "bidding" && <p className="text-xs text-muted">{t("leave_locked")}</p>}
               </>
             )}
             <ShareButton label={t("share")} copiedLabel={t("copied")} text={t("share_text")} path={`/deals/${deal.id}`} />

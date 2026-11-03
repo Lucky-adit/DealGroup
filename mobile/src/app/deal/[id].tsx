@@ -109,11 +109,12 @@ export default function DealScreen() {
               title={mine ? t("update_btn") : t("pledge_btn")}
               onPress={async () => {
                 const r = await run((x) => svc.pledge(x, { dealId: deal.id, name, phone, quantity: qty }));
-                setMsg(r?.error ? { code: r.error } : { ok: t("you_pledged", { n: qty }) });
+                setMsg(r?.error ? { code: r.error } : { ok: t("pledge_saved") });
               }}
             />
             <Message code={msg?.code} ok={msg?.ok} />
-            {mine && <Button variant="secondary" title={t("leave_btn")} onPress={() => run((x) => svc.withdraw(x, deal.id)).then(() => setMsg(null))} />}
+            {mine && deal.phase === "pledging" && <Button variant="secondary" title={t("leave_btn")} onPress={() => run((x) => svc.withdraw(x, deal.id)).then(() => setMsg(null))} />}
+            {mine && deal.phase === "bidding" && <P muted style={{ fontSize: 12 }}>{t("leave_locked")}</P>}
           </>
         )}
         <Row style={{ justifyContent: "flex-start" }}>
