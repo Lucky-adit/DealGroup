@@ -1,5 +1,7 @@
 # DealGroup
 
+> Mobile apps (iPhone + Android) live in [`mobile/`](mobile/README.md) and share `lib/` with this website.
+
 Group-buying platform: neighbours pledge to buy the same product, then verified sellers bid for the whole group.
 MVP: rooftop solar for housing societies in Ahmedabad. Responsive on phones, tablets and desktop. English and Hindi.
 

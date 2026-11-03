@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+import { uid as randomUUID } from "../uid";
 import type { Bid, Deal, DealRequest, Install, Pledge, Review, Seller } from "../types";
 import type { Repo } from "./repo";
 import { withStats } from "./stats";
@@ -51,7 +51,7 @@ function seed(): Store {
   };
 }
 
-// Survive hot reloads in dev.
+// Survive hot reloads in dev (web) and fast refresh (mobile).
 const g = globalThis as unknown as { __dealgroupStore?: Store };
 const db = (g.__dealgroupStore ??= seed());
 

@@ -1,0 +1,8 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": { "@shared/*": ["../lib/*"], "@/*": ["./src/*"] }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "../lib/types.ts", "../lib/pricing.ts", "../lib/i18n.ts", "../lib/services.ts", "../lib/uid.ts", "../lib/data/demo.ts", "../lib/data/repo.ts", "../lib/data/stats.ts", "../lib/data/supabase-repo.ts", "expo-env.d.ts"]
+}
