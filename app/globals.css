@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Indigo + saffron, a nod to Ahmedabad's textile trade. Values are RGB triplets for Tailwind alpha support. */
+:root {
+  --bg: 245 246 251; --surface: 255 255 255; --fg: 27 31 51; --muted: 91 98 128; --line: 223 226 238; --chip: 233 236 248;
+  --brand: 43 58 140; --brand-fg: 255 255 255; --accent: 184 116 10; --good: 31 122 77; --warn: 161 92 0;
+  --font-display: "Familjen Grotesk"; --font-body: "IBM Plex Sans";
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: 18 20 31; --surface: 26 29 44; --fg: 231 233 243; --muted: 162 168 196; --line: 45 49 72; --chip: 38 42 64;
+    --brand: 159 176 255; --brand-fg: 18 20 31; --accent: 240 180 74; --good: 95 207 149; --warn: 240 180 74;
+    color-scheme: dark;
+  }
+}
+
+html { -webkit-text-size-adjust: 100%; }
+body { @apply bg-bg text-fg font-sans antialiased; }
+h1, h2, h3 { @apply font-display; text-wrap: balance; }
+
+@layer components {
+  .container-page { @apply mx-auto w-full max-w-6xl px-4 sm:px-6; }
+  .card { @apply rounded-xl border border-line bg-surface p-4 sm:p-5; }
+  .btn { @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 py-2 text-sm font-medium transition hover:border-brand disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply btn border-brand bg-brand text-brand-fg hover:opacity-90; }
+  .btn-sm { @apply min-h-[36px] px-3 py-1 text-xs; }
+  .input { @apply min-h-[44px] w-full rounded-lg border border-line bg-bg px-3 py-2 text-base text-fg placeholder:text-muted sm:text-sm; }
+  .label { @apply flex flex-col gap-1 text-sm text-muted; }
+  .pill { @apply inline-flex items-center whitespace-nowrap rounded-full bg-chip px-2 py-0.5 text-xs font-medium; }
+  .tag { @apply text-[11px] font-semibold uppercase tracking-wider text-accent; }
+  .table-wrap { @apply -mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0; }
+}
+
+:focus-visible { outline: 2px solid rgb(var(--accent)); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
